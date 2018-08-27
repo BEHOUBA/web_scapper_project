@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>web scrapper app</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <script src="/static/js/axios.min.js"></script>
+  <style type="text/css">
+    .card {
+      height: 100px;
+      display: inline;
+    }
+
+    .image {
+      width: 30%;
+      float: left;
+    }
+
+    .image img {
+      max-width: 200px;
+      max-height: 200px;
+      object-fit: cover;
+    }
+
+    .info {
+      width: 70%;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+
+  </header>
+  <main>
+    <div>
+      <form action="">
+        <input id="search-input" name="query" type="text">
+        <button type="button" onclick="searchRequest()">Search</button>
+      </form>
+      <div id="listing">
+
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div>
+
+    </div>
+  </footer>
+  <script src="/static/js/reload.min.js"></script>
+  <script src="/static/js/index.js"></script>
+</body>
+
+</html>
