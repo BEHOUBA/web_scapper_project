@@ -7,6 +7,6 @@ api projects to scrappe data from all majors ecommerce, hostel and jobs search w
 # Tech stacks used
 
 
-*Golang web framework Beego
-*Redis in-memory database
-*Raw html css and javascript on client-side
+* Golang web framework Beego
+* Redis in-memory database
+* Raw html css and javascript on client-side
