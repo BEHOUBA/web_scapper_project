@@ -2,31 +2,29 @@ package models
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
-type Product struct {
-	Title   string `json:"title"`
-	Price   string `json:"price"`
-	Picture string `json:"picture"`
-	Link    string `json:"link"`
-}
-
 const (
 	userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"
-	jumia     = "https://www.jumia.ci/catalog"
+	jumia     = "https://www.jumia.ci/"
 )
 
-// jumiaSearch take the query and the category string with page number
+// JumiaSearch take the query and the category string with page number
 // make request to jumia.ci and return List of product found and error
 func JumiaSearch(pageCount int, category, query string) (pList []Product, err error) {
 	if category == "" {
 		category = "catalog"
 	}
 	// construction of url of the request
-	url := fmt.Sprintf("%s/%s/?q=%s&page=%d", jumia, category, query, pageCount)
+	url := fmt.Sprintf("%s/%s/?page=%d&q=%s", jumia, category, pageCount, url.QueryEscape(query))
+
+	log.Println(url)
 
 	doc, err := makeGETRequest(url)
 	if err != nil {
@@ -40,6 +38,7 @@ func JumiaSearch(pageCount int, category, query string) (pList []Product, err er
 		p.Picture, _ = s.Find(".image").Attr("data-src")
 		p.Price = s.Find(".price").First().Text()
 		if p != (Product{}) {
+			p.Origin = "JUMIA"
 			pList = append(pList, p)
 		}
 	})
@@ -65,6 +64,13 @@ func makeGETRequest(url string) (doc *goquery.Document, err error) {
 		return
 	}
 	defer resp.Body.Close()
+	d, _ := goquery.NewDocument(url)
+	html_contents, _ := d.Html()
+	// bs, _ := ioutil.ReadAll(resp.Body)
+	err = ioutil.WriteFile("index.html", []byte(html_contents), 0644)
+	if err != nil {
+		panic(err)
+	}
 
 	doc, err = goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
