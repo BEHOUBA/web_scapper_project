@@ -17,7 +17,7 @@ func YaatooSearch(pageCount int, query string) (pList []Product, err error) {
 
 	// construction of url of the request
 	url := fmt.Sprintf(yaatooURLFormat, url.QueryEscape(query), pageCount)
-
+	fmt.Println("yaatooURL ", url)
 	doc, err := makeGETRequest(url)
 	if err != nil {
 		return

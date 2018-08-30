@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"
-	jumia     = "https://www.jumia.ci/"
+	userAgent      = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"
+	jumiaURLFormat = "https://www.jumia.ci/%s/?page=%d&q=%s"
 )
 
 // JumiaSearch take the query and the category string with page number
@@ -20,7 +20,7 @@ func JumiaSearch(pageCount int, category, query string) (pList []Product, err er
 		category = "catalog"
 	}
 	// construction of url of the request
-	url := fmt.Sprintf("%s/%s/?page=%d&q=%s", jumia, category, pageCount, url.QueryEscape(query))
+	url := fmt.Sprintf(jumiaURLFormat, category, pageCount, url.QueryEscape(query))
 
 	doc, err := makeGETRequest(url)
 	if err != nil {

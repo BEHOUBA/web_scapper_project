@@ -13,7 +13,7 @@ import (
 func ArticlesController(ctx *context.Context) {
 	q := ctx.Input.Query("q")
 	var allData []models.Product
-
+	var reqNumber = 4
 	dataChan := make(chan []models.Product)
 
 	go func() {
@@ -21,7 +21,6 @@ func ArticlesController(ctx *context.Context) {
 		if err != nil {
 			log.Println(err)
 			// ctx.Output.SetStatus(http.StatusInternalServerError)
-			return
 		}
 		dataChan <- jumiaData
 	}()
@@ -30,24 +29,37 @@ func ArticlesController(ctx *context.Context) {
 		afData, err := models.AfrimarketSearch(0, "", q)
 		if err != nil {
 			log.Println(err)
-			return
 		}
 		dataChan <- afData
 	}()
+
+	// go func() {
+	// 	afData, err := models.YaatooSearch(1, q)
+	// 	if err != nil {
+	// 		log.Println(err)
+	// 	}
+	// 	dataChan <- afData
+	// }()
 
 	go func() {
-		afData, err := models.YaatooSearch(1, q)
+		afData, err := models.BabikenSearch(q)
 		if err != nil {
 			log.Println(err)
-			return
+		}
+		dataChan <- afData
+	}()
+	go func() {
+		afData, err := models.SitcomSearch(1, q)
+		if err != nil {
+			log.Println(err)
 		}
 		dataChan <- afData
 	}()
 
-	for i := 0; i < 3; i++ {
+	for i := 1; i <= reqNumber; i++ {
 
 		allData = append(allData, <-dataChan...)
-		if 2 == i {
+		if reqNumber == i {
 			close(dataChan)
 			jsonBs, err := json.Marshal(allData)
 			if err != nil {

@@ -7,7 +7,7 @@ import (
 	_ "github.com/behouba/webScrapperApp/routers"
 )
 
-var randomSearchValues = []string{"samsung", "samsung galaxy", "iphone", "Xbox", "LG "}
+var randomSearchValues = []string{"samsung", "samsung galaxy", "iphone", "Xbox", "LG ", "lenovo ideapad"}
 
 // func TestJumiaSearch(t *testing.T) {
 // 	for _, s := range randomSearchValues {
@@ -29,9 +29,29 @@ var randomSearchValues = []string{"samsung", "samsung galaxy", "iphone", "Xbox",
 // 	}
 // }
 
-func TestYaatooSearch(t *testing.T) {
+// func TestYaatooSearch(t *testing.T) {
+// 	for _, s := range randomSearchValues {
+// 		pList, err := models.YaatooSearch(1, s)
+// 		if err != nil {
+// 			t.Errorf("%s", err)
+// 		}
+// 		t.Log("found ", len(pList))
+// 	}
+// }
+
+// func TestBabikenSearch(t *testing.T) {
+// 	for _, s := range randomSearchValues {
+// 		pList, err := models.BabikenSearch(s)
+// 		if err != nil {
+// 			t.Errorf("%s", err)
+// 		}
+// 		t.Log("found ", len(pList))
+// 	}
+// }
+
+func TestSitcomSearch(t *testing.T) {
 	for _, s := range randomSearchValues {
-		pList, err := models.YaatooSearch(1, s)
+		pList, err := models.SitcomSearch(1, s)
 		if err != nil {
 			t.Errorf("%s", err)
 		}
