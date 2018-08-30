@@ -14,8 +14,7 @@ func ArticlesController(ctx *context.Context) {
 	q := ctx.Input.Query("q")
 	var allData []models.Product
 
-	req := make(chan int)
-	goroutineTracker := 0
+	dataChan := make(chan []models.Product)
 
 	go func() {
 		jumiaData, err := models.JumiaSearch(1, "", q)
@@ -24,9 +23,7 @@ func ArticlesController(ctx *context.Context) {
 			// ctx.Output.SetStatus(http.StatusInternalServerError)
 			return
 		}
-		allData = append(allData, jumiaData...)
-		goroutineTracker++
-		req <- goroutineTracker
+		dataChan <- jumiaData
 	}()
 
 	go func() {
@@ -35,13 +32,23 @@ func ArticlesController(ctx *context.Context) {
 			log.Println(err)
 			return
 		}
-		allData = append(allData, afData...)
-		goroutineTracker++
-		req <- goroutineTracker
+		dataChan <- afData
 	}()
 
-	for i := 0; i < 2; i++ {
-		if 2 == <-req {
+	go func() {
+		afData, err := models.YaatooSearch(1, q)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		dataChan <- afData
+	}()
+
+	for i := 0; i < 3; i++ {
+
+		allData = append(allData, <-dataChan...)
+		if 2 == i {
+			close(dataChan)
 			jsonBs, err := json.Marshal(allData)
 			if err != nil {
 				log.Println(err)
@@ -49,7 +56,6 @@ func ArticlesController(ctx *context.Context) {
 				return
 			}
 			ctx.Output.JSON(string(jsonBs), false, false)
-			log.Println(<-req)
 		}
 	}
 }

@@ -2,8 +2,6 @@ package models
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 
@@ -24,8 +22,6 @@ func JumiaSearch(pageCount int, category, query string) (pList []Product, err er
 	// construction of url of the request
 	url := fmt.Sprintf("%s/%s/?page=%d&q=%s", jumia, category, pageCount, url.QueryEscape(query))
 
-	log.Println(url)
-
 	doc, err := makeGETRequest(url)
 	if err != nil {
 		return
@@ -42,7 +38,7 @@ func JumiaSearch(pageCount int, category, query string) (pList []Product, err er
 			pList = append(pList, p)
 		}
 	})
-
+	fmt.Println("got ", len(pList), "on jumia")
 	return
 }
 
@@ -64,13 +60,6 @@ func makeGETRequest(url string) (doc *goquery.Document, err error) {
 		return
 	}
 	defer resp.Body.Close()
-	d, _ := goquery.NewDocument(url)
-	html_contents, _ := d.Html()
-	// bs, _ := ioutil.ReadAll(resp.Body)
-	err = ioutil.WriteFile("index.html", []byte(html_contents), 0644)
-	if err != nil {
-		panic(err)
-	}
 
 	doc, err = goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {

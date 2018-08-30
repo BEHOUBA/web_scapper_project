@@ -19,9 +19,19 @@ var randomSearchValues = []string{"samsung", "samsung galaxy", "iphone", "Xbox",
 // 	}
 // }
 
-func TestAfrimarket(t *testing.T) {
+// func TestAfrimarket(t *testing.T) {
+// 	for _, s := range randomSearchValues {
+// 		pList, err := models.AfrimarketSearch(1, "", s)
+// 		if err != nil {
+// 			t.Errorf("%s", err)
+// 		}
+// 		t.Log("found ", len(pList))
+// 	}
+// }
+
+func TestYaatooSearch(t *testing.T) {
 	for _, s := range randomSearchValues {
-		pList, err := models.AfrimarketSearch(1, "", s)
+		pList, err := models.YaatooSearch(1, s)
 		if err != nil {
 			t.Errorf("%s", err)
 		}
