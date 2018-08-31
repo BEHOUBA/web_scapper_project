@@ -70,13 +70,24 @@ var randomSearchValues = []string{"samsung", "samsung galaxy", "iphone", "Xbox",
 // 	}
 // }
 
-func TestPdastoreciSearch(t *testing.T) {
+// func TestPdastoreciSearch(t *testing.T) {
+// 	for _, s := range randomSearchValues {
+// 		pList, err := models.PdastoreciSearch(s, 1)
+// 		if err != nil {
+// 			t.Errorf("%s", err)
+// 		}
+// 		t.Log("found ", len(pList))
+// 		t.Log("first ", pList[0])
+// 	}
+// }
+
+func TestSitcomAll(t *testing.T) {
 	for _, s := range randomSearchValues {
-		pList, err := models.PdastoreciSearch(s, 1)
+		pList, err := models.AllFromSitcom(s)
 		if err != nil {
 			t.Errorf("%s", err)
 		}
 		t.Log("found ", len(pList))
-		t.Log("first ", pList[0])
+		// t.Log("first ", pList[0])
 	}
 }

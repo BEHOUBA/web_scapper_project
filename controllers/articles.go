@@ -18,7 +18,7 @@ func ArticlesController(ctx *context.Context) {
 	dataChan := make(chan []models.Product)
 
 	go func() {
-		jumiaData, err := models.JumiaSearch(1, "", q)
+		jumiaData, err := models.AllFromJumia(q)
 		if err != nil {
 			log.Println(err)
 			// ctx.Output.SetStatus(http.StatusInternalServerError)
@@ -27,7 +27,7 @@ func ArticlesController(ctx *context.Context) {
 	}()
 
 	go func() {
-		afData, err := models.AfrimarketSearch(0, "", q)
+		afData, err := models.AllFromAfrimarket(q)
 		if err != nil {
 			log.Println(err)
 		}
@@ -35,7 +35,7 @@ func ArticlesController(ctx *context.Context) {
 	}()
 
 	// go func() {
-	// 	afData, err := models.YaatooSearch(1, q)
+	// 	afData, err := models.AllFromYaatoo(q)
 	// 	if err != nil {
 	// 		log.Println(err)
 	// 	}
@@ -50,7 +50,7 @@ func ArticlesController(ctx *context.Context) {
 		dataChan <- afData
 	}()
 	go func() {
-		afData, err := models.SitcomSearch(1, q)
+		afData, err := models.AllFromSitcom(q)
 		if err != nil {
 			log.Println(err)
 		}
@@ -58,7 +58,7 @@ func ArticlesController(ctx *context.Context) {
 	}()
 
 	go func() {
-		afData, err := models.AfrikdiscountSearch(q, 1)
+		afData, err := models.AllFromAfrikdiscount(q)
 		if err != nil {
 			log.Println(err)
 		}
@@ -66,7 +66,7 @@ func ArticlesController(ctx *context.Context) {
 	}()
 
 	go func() {
-		afData, err := models.PdastoreciSearch(q, 1)
+		afData, err := models.AllFromPdastoreci(q)
 		if err != nil {
 			log.Println(err)
 		}

@@ -12,15 +12,44 @@ const (
 	sitcomURLFormat = "https://www.sitcom.ci/page/%d/?search_category&s=%s&search_posttype=product"
 )
 
+// AllFromSitcom search for all article
+// related to a specifique query string on sitcom.ci
+func AllFromSitcom(query string) (pList []Product, err error) {
+
+	pChan := make(chan []Product)
+	for i := 1; i <= 5; i++ {
+		page := i
+		go func() {
+			list, err := SitcomSearch(page, query)
+			pChan <- list
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			return
+		}()
+	}
+
+	for j := 1; j <= 5; j++ {
+		pList = append(pList, <-pChan...)
+		if j == 5 {
+			close(pChan)
+			fmt.Println("got ", len(pList), "on sitcom")
+			return
+		}
+	}
+	return
+}
+
 // SitcomSearch take the query and the category string with page number
-// make request to babiken.ci and return List of product found and error
+// make request to sitcom.ci and return List of product found and error
 func SitcomSearch(pageCount int, query string) (pList []Product, err error) {
 
 	// construction of url of the request
 	url := fmt.Sprintf(sitcomURLFormat, pageCount, url.QueryEscape(query))
 
 	doc, err := makeGETRequest(url)
-	if err != nil {
+	if err != nil || doc == nil {
 		return
 	}
 
@@ -43,6 +72,5 @@ func SitcomSearch(pageCount int, query string) (pList []Product, err error) {
 			pList = append(pList, p)
 		}
 	})
-	fmt.Println("got ", len(pList), "on sitcom")
 	return
 }

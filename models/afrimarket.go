@@ -38,6 +38,35 @@ const (
 	apiURL           = afrimarketURL + afrimarketAPIKEY
 )
 
+// AllFromAfrimarket search for all article
+// related to a specifique query string on afrimarket.ci
+func AllFromAfrimarket(query string) (pList []Product, err error) {
+
+	pChan := make(chan []Product)
+	for i := 1; i <= 5; i++ {
+		page := i
+		go func() {
+			list, err := AfrimarketSearch(page, "", query)
+			pChan <- list
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			return
+		}()
+	}
+
+	for j := 1; j <= 5; j++ {
+		pList = append(pList, <-pChan...)
+		if j == 5 {
+			close(pChan)
+			fmt.Println("got ", len(pList), "on afrimarket")
+			return
+		}
+	}
+	return
+}
+
 // AfrimarketSearch take the query and the category string with page number
 // make request to afrimarket.ci and return List of product found and error
 func AfrimarketSearch(pageCount int, category, query string) (pList []Product, err error) {
@@ -57,16 +86,19 @@ func AfrimarketSearch(pageCount int, category, query string) (pList []Product, e
 			Link:    p.Link,
 			Picture: p.Picture,
 		}
-		product.Price, err = formatPriceToInt(p.Price.XOF.PriceFormated)
-		if err != nil {
-			log.Println(err)
+
+		product.Price, _ = formatPriceToInt(p.Price.XOF.PriceFormated)
+		// if err != nil {
+		// 	log.Println(err)
+		// }
+		if product.Price > 90000000 {
+			continue
 		}
 		if product != (Product{}) {
 			product.Origin = "AFRIMARKET"
 			pList = append(pList, product)
 		}
 	}
-	fmt.Println("got ", len(pList), "on afrimarket")
 	return
 }
 
