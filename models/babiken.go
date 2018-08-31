@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
@@ -28,7 +29,10 @@ func BabikenSearch(query string) (pList []Product, err error) {
 		p.Title = s.Find(".product-ft-title").Text()
 		p.Link, _ = s.Find(".field-content").Find("a").Attr("href")
 		p.Picture, _ = s.Find(".product-img").Find("img").Attr("src")
-		p.Price = s.Find(".product-ft-price").Text()
+		p.Price, err = formatPriceToInt(s.Find(".product-ft-price").Text())
+		if err != nil {
+			log.Println(err)
+		}
 		if p != (Product{}) {
 			p.Origin = "BABIKEN"
 			pList = append(pList, p)

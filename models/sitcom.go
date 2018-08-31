@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
@@ -25,12 +26,17 @@ func SitcomSearch(pageCount int, query string) (pList []Product, err error) {
 
 	doc.Find("#loop-products").Find("li").Each(func(i int, s *goquery.Selection) {
 		p := Product{}
+		var pString string
 		p.Title, _ = s.Find(".item-content").Find("h4").Find("a").Attr("title")
 		p.Link, _ = s.Find(".item-content").Find("h4").Find("a").Attr("href")
 		p.Picture, _ = s.Find(".product-thumb-hover").Find("img").Attr("src")
-		p.Price = s.Find(".item-price").Find("ins").Find(".woocommerce-Price-amount").Text()
-		if p.Price == "" {
-			p.Price = s.Find(".item-price").Find(".woocommerce-Price-amount").Text()
+		pString = s.Find(".item-price").Find("ins").Find(".woocommerce-Price-amount").Text()
+		if pString == "" {
+			pString = s.Find(".item-price").Find(".woocommerce-Price-amount").Text()
+		}
+		p.Price, err = formatPriceToInt(pString)
+		if err != nil {
+			log.Println(err)
 		}
 		if p != (Product{}) {
 			p.Origin = "SITCOM"

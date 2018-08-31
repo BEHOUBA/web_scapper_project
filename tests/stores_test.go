@@ -49,12 +49,34 @@ var randomSearchValues = []string{"samsung", "samsung galaxy", "iphone", "Xbox",
 // 	}
 // }
 
-func TestSitcomSearch(t *testing.T) {
+// func TestSitcomSearch(t *testing.T) {
+// 	for _, s := range randomSearchValues {
+// 		pList, err := models.SitcomSearch(1, s)
+// 		if err != nil {
+// 			t.Errorf("%s", err)
+// 		}
+// 		t.Log("found ", len(pList))
+// 	}
+// }
+
+// func TestAfrikdiscountSearch(t *testing.T) {
+// 	for _, s := range randomSearchValues {
+// 		pList, err := models.AfrikdiscountSearch(s, 1)
+// 		if err != nil {
+// 			t.Errorf("%s", err)
+// 		}
+// 		t.Log("found ", len(pList))
+// 		t.Log("first ", pList[0])
+// 	}
+// }
+
+func TestPdastoreciSearch(t *testing.T) {
 	for _, s := range randomSearchValues {
-		pList, err := models.SitcomSearch(1, s)
+		pList, err := models.PdastoreciSearch(s, 1)
 		if err != nil {
 			t.Errorf("%s", err)
 		}
 		t.Log("found ", len(pList))
+		t.Log("first ", pList[0])
 	}
 }

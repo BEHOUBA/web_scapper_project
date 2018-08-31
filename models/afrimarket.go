@@ -56,7 +56,10 @@ func AfrimarketSearch(pageCount int, category, query string) (pList []Product, e
 			Title:   p.Title,
 			Link:    p.Link,
 			Picture: p.Picture,
-			Price:   p.Price.XOF.PriceFormated,
+		}
+		product.Price, err = formatPriceToInt(p.Price.XOF.PriceFormated)
+		if err != nil {
+			log.Println(err)
 		}
 		if product != (Product{}) {
 			product.Origin = "AFRIMARKET"

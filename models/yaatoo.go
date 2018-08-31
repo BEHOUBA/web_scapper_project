@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
@@ -28,7 +29,10 @@ func YaatooSearch(pageCount int, query string) (pList []Product, err error) {
 		p.Title, _ = s.Find(".product-meta").Find(".left").Find("h3").Find("a").Attr("title")
 		p.Link, _ = s.Find(".product-meta").Find(".left").Find("h3").Find("a").Attr("href")
 		p.Picture, _ = s.Find(".product_img_link").Find("img").Attr("src")
-		p.Price = s.Find(".product-price").Text()
+		p.Price, err = formatPriceToInt(s.Find(".product-price").Text())
+		if err != nil {
+			log.Println(err)
+		}
 		if p != (Product{}) {
 			p.Origin = "YAATOO"
 			pList = append(pList, p)

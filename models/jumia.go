@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -32,7 +33,10 @@ func JumiaSearch(pageCount int, category, query string) (pList []Product, err er
 		p.Title = s.Find(".title").Text()
 		p.Link, _ = s.Find(".link").Attr("href")
 		p.Picture, _ = s.Find(".image").Attr("data-src")
-		p.Price = s.Find(".price").First().Text()
+		p.Price, err = formatPriceToInt(s.Find(".price").First().Text())
+		if err != nil {
+			log.Println(err)
+		}
 		if p != (Product{}) {
 			p.Origin = "JUMIA"
 			pList = append(pList, p)

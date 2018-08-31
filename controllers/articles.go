@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"log"
+	"sort"
 
 	"github.com/astaxie/beego/context"
 	"github.com/behouba/webScrapperApp/models"
@@ -13,7 +14,7 @@ import (
 func ArticlesController(ctx *context.Context) {
 	q := ctx.Input.Query("q")
 	var allData []models.Product
-	var reqNumber = 4
+	var reqNumber = 6
 	dataChan := make(chan []models.Product)
 
 	go func() {
@@ -56,11 +57,29 @@ func ArticlesController(ctx *context.Context) {
 		dataChan <- afData
 	}()
 
-	for i := 1; i <= reqNumber; i++ {
+	go func() {
+		afData, err := models.AfrikdiscountSearch(q, 1)
+		if err != nil {
+			log.Println(err)
+		}
+		dataChan <- afData
+	}()
 
+	go func() {
+		afData, err := models.PdastoreciSearch(q, 1)
+		if err != nil {
+			log.Println(err)
+		}
+		dataChan <- afData
+	}()
+
+	for i := 1; i <= reqNumber; i++ {
 		allData = append(allData, <-dataChan...)
 		if reqNumber == i {
 			close(dataChan)
+			sort.Slice(allData, func(i, j int) bool {
+				return allData[i].Price < allData[j].Price
+			})
 			jsonBs, err := json.Marshal(allData)
 			if err != nil {
 				log.Println(err)
