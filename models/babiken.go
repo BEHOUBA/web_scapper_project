@@ -26,7 +26,7 @@ func BabikenSearch(query string) (pList []Product, err error) {
 	doc.Find(".all-products").Find("li").Each(func(i int, s *goquery.Selection) {
 		p := Product{}
 		p.Title = s.Find(".product-ft-title").Text()
-		p.Link, _ = s.Find(".field-content").Find("span").Find("a").Attr("href")
+		p.Link, _ = s.Find(".field-content").Find("a").Attr("href")
 		p.Picture, _ = s.Find(".product-img").Find("img").Attr("src")
 		p.Price = s.Find(".product-ft-price").Text()
 		if p != (Product{}) {
