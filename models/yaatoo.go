@@ -38,6 +38,7 @@ func AllFromYaatoo(query string) (pList []Product, err error) {
 			return
 		}
 	}
+	fmt.Println("got ", len(pList), "on yaatoo")
 	return
 }
 
@@ -47,7 +48,6 @@ func YaatooSearch(pageCount int, query string) (pList []Product, err error) {
 
 	// construction of url of the request
 	url := fmt.Sprintf(yaatooURLFormat, url.QueryEscape(query), pageCount)
-	fmt.Println("yaatooURL ", url)
 	doc, err := makeGETRequest(url)
 	if err != nil || doc == nil {
 		return
@@ -67,6 +67,5 @@ func YaatooSearch(pageCount int, query string) (pList []Product, err error) {
 			pList = append(pList, p)
 		}
 	})
-	fmt.Println("got ", len(pList), "on yaatoo")
 	return
 }

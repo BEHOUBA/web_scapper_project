@@ -14,7 +14,7 @@ import (
 func ArticlesController(ctx *context.Context) {
 	q := ctx.Input.Query("q")
 	var allData []models.Product
-	var reqNumber = 6
+	var reqNumber = 7
 	dataChan := make(chan []models.Product)
 
 	go func() {
@@ -34,13 +34,13 @@ func ArticlesController(ctx *context.Context) {
 		dataChan <- afData
 	}()
 
-	// go func() {
-	// 	afData, err := models.AllFromYaatoo(q)
-	// 	if err != nil {
-	// 		log.Println(err)
-	// 	}
-	// 	dataChan <- afData
-	// }()
+	go func() {
+		afData, err := models.AllFromYaatoo(q)
+		if err != nil {
+			log.Println(err)
+		}
+		dataChan <- afData
+	}()
 
 	go func() {
 		afData, err := models.BabikenSearch(q)
