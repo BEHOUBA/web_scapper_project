@@ -6,7 +6,7 @@ import (
 	"sort"
 
 	"github.com/astaxie/beego/context"
-	"github.com/behouba/webScrapperApp/models"
+	"github.com/behouba/webScrapperApp/models/stores"
 )
 
 // ArticlesController handler function handle

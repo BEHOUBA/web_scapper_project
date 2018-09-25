@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	babikenURLFormat = "https://www.babiken.ci/fr/products?search_api_views_fulltext=%s"
+	babikenURLFormat = "https://www.babiken.ci/fr/products?query=%s"
 )
 
 // BabikenSearch take the query and the category string with page number

@@ -3,11 +3,11 @@ package test
 import (
 	"testing"
 
-	"github.com/behouba/webScrapperApp/models"
+	"github.com/behouba/webScrapperApp/models/stores"
 	_ "github.com/behouba/webScrapperApp/routers"
 )
 
-var randomSearchValues = []string{"samsung", "samsung galaxy", "iphone", "Xbox", "LG ", "lenovo ideapad"}
+var randomSearchValues = []string{"samsung", "samsung galaxy", "iphone", "Xbox", "LG", "lenovo ideapad"}
 
 // func TestJumiaSearch(t *testing.T) {
 // 	for _, s := range randomSearchValues {
